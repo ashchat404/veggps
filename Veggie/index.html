@@ -8,68 +8,170 @@
     <script src="bower_components/modernizr/modernizr.js"></script>
     <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDnB1c46S08wnHCFLQBQX-tmHS1mq1tc9E&libraries=places&sensor=false"></script>
     <script type="text/javascript">
+ //<![CDATA[
 var map;
 var infowindow;
-
 function initialize() {
-  var mapOptions = {
-    zoom: 15
-  };
-  map = new google.maps.Map(document.getElementById('map-canvas'),
-      mapOptions);
-  // Try HTML5 geolocation
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(function(position) {
-      var pos = new google.maps.LatLng(position.coords.latitude,
-                                       position.coords.longitude);
+    var mapOptions = {
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
 
-      var infowindow = new google.maps.InfoWindow({
+    map = new google.maps.Map(document.getElementById('map-canvas'),
+    mapOptions);
+
+    // Try HTML5 geolocation
+    if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = new google.maps.LatLng(position.coords.latitude,
+          position.coords.longitude);
+          infowindow = new google.maps.InfoWindow({
+          map: map,
+          position: pos,
+          });
+          var marker = new google.maps.Marker({
+          map: map,
+          position: pos,
+          icon : "img/map_icon.png"
+          });
+          infowindow.setContent('<h5 style="margin:10px">Your location :)</h5>');
+          //var radiuss = document.getElementById("radius");
+          //var radiusval = radiuss.value;
+          //if (radiusval == ""){
+           // radiusval = 500;
+
+          //}
+
+
+          var request = {
+          location: pos,
+          radius: 500,
+          types: ['food']
+          }; 
+
+          service = new google.maps.places.PlacesService(map);
+          service.nearbySearch(request, callback);
+
+          //console.log(pos);
+
+          map.setCenter(pos);
+        }, function() {
+        handleNoGeolocation(true);
+        });
+
+    }
+    else {
+      // Browser doesn't support Geolocation
+      handleNoGeolocation(false);
+    }
+
+    function callback(results, status) {
+      $("#details").empty();
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        downloadUrl("php_to_xml.php",function(data){
+          var xml = data.responseXML;
+          var array = [];
+          var markers = xml.documentElement.getElementsByTagName("resdetails");
+          var detail = xml.documentElement.getElementsByTagName("detail1");
+
+          /*for (r = 0; r < detail.length; r++){
+            var maindetail = detail[r].childNodes[0].getAttribute('name');
+            var mainid = markers[r].getAttribute('id');
+            var dish = detail[r].childNodes[1];
+            var attrname = dish.getAttribute("name");
+            for (j = 0; j<detail[r].childNodes.length;j++){
+              var info = detail[r].childNodes[j].getAttributeNode('dishname');
+              if (info != null){
+                var txt = info.nodeValue;
+                array.push([mainid,maindetail,txt]);                
+              }
+            } 
+          }*/
+
+
+          for (r = 0; r < detail.length; r++){
+              var maindetail = detail[r].childNodes[0].getAttribute('name');
+              var mainid = detail[r].childNodes[0].getAttribute('id');
+
+              var dishes=[];
+              for (j = 1; j<detail[r].childNodes.length;j++){  // start at 1 because 0 should be resdetails
+                  var info = detail[r].childNodes[j].getAttributeNode('dishname');
+                  if (info != null){
+                      dishes.push(info.nodeValue); 
+                  }
+              }
+              array.push([mainid,maindetail,dishes]);  
+          }
+
+          for (var i = 0; i < results.length; i++){
+            var place = results[i];
+            console.log(results[i].id + " " + results[i].name);
+            for (d = 0;d < array.length; d++){
+             // console.log(d + "=" + array[d]);
+                if (place.id == array[d][0]){
+                  createMarker(results[i]);
+                  //console.log('matched');
+                  var det = document.getElementById("details");
+                  det.innerHTML += place.name + "<br />" + "<span style='padding:10px;color:grey'>"+ place.vicinity + " " + "</span>" + "<br>" + "<div style='border:1px solid black'>" + "<p style='color:orange'>dishes</p> <br>" + array[d][2] + "</div> " + "<br />";                                         
+                }
+            }
+          }
+
+        });
+      }
+    }
+
+
+    function createMarker(place) {
+      var placeLoc = place.geometry.location;
+      var marker = new google.maps.Marker({
         map: map,
-        position: pos,
-        content: 'Location found using HTML5.'
+        position: place.geometry.location
       });
 
-      var request = {
-        location: pos,
-        radius: 500,
-        types: ['restaurant']
-      };
-    var service = new google.maps.places.PlacesService(map);
-    service.nearbySearch(request, callback);
+      google.maps.event.addListener(marker, 'click', function() {
+        infowindow.setContent(place.name);
+        infowindow.open(map, this);
+      });
 
-      map.setCenter(pos);
-    }, function() {
-      handleNoGeolocation(true);
-    });
-  } else {
-    // Browser doesn't support Geolocation
-    handleNoGeolocation(false);
-  }
-
-infowindow = new google.maps.InfoWindow();
-}
-
-function callback(results, status) {
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      createMarker(results[i]);
     }
-  }
 }
 
-function createMarker(place) {
-  var placeLoc = place.geometry.location;
-  var marker = new google.maps.Marker({
-    map: map,
-    position: place.geometry.location
-  });
+    function downloadUrl(url, callback) {
+      var request = window.ActiveXObject ?
+      new ActiveXObject('Microsoft.XMLHTTP') :
+      new XMLHttpRequest;
 
-  google.maps.event.addListener(marker, 'click', function() {
-    infowindow.setContent(place.name);
-    infowindow.open(map, this);
-  });
-}
+      request.onreadystatechange = function() {
+      if (request.readyState == 4) {
+        request.onreadystatechange = doNothing;
+        callback(request, request.status);
+      }
+    };
+    
+    function doNothing() {}
+      request.open('GET', url, true);
+      request.send(null);
+    }
+    
+    function handleNoGeolocation(errorFlag) {
+      if (errorFlag) {
+        var content = 'Error: The Geolocation service failed.';
+      } else {
+        var content = 'Error: Your browser doesn\'t support geolocation.';
+      }
 
+      var options = {
+        map: map,
+        position: new google.maps.LatLng(60, 105),
+        content: content
+      };
+
+      var infowindow = new google.maps.InfoWindow(options);
+      map.setCenter(options.position);
+    }
+  
+  //]]>
 google.maps.event.addDomListener(window, 'load', initialize);
 
     </script>
@@ -81,6 +183,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
 
       <section>
         <div id="map-canvas"></div>
+        <div id="details"></div>
       </section>
 
     </article>
