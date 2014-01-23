@@ -29,6 +29,14 @@ function initialize() {
         content: 'Location found using HTML5.'
       });
 
+      var request = {
+        location: pos,
+        radius: 500,
+        types: ['restaurant']
+      };
+    var service = new google.maps.places.PlacesService(map);
+    service.nearbySearch(request, callback);
+
       map.setCenter(pos);
     }, function() {
       handleNoGeolocation(true);
@@ -38,9 +46,7 @@ function initialize() {
     handleNoGeolocation(false);
   }
 
-  infowindow = new google.maps.InfoWindow();
-  var service = new google.maps.places.PlacesService(map);
-  service.nearbySearch(request, callback);
+infowindow = new google.maps.InfoWindow();
 }
 
 function callback(results, status) {
