@@ -25,6 +25,7 @@ function initialize() {
         navigator.geolocation.getCurrentPosition(function(position) {
           var pos = new google.maps.LatLng(position.coords.latitude,
           position.coords.longitude);
+
           infowindow = new google.maps.InfoWindow({
           map: map,
           position: pos,
@@ -35,13 +36,6 @@ function initialize() {
           icon : "img/map_icon.png"
           });
           infowindow.setContent('<h5 style="margin:10px">Your location :)</h5>');
-          //var radiuss = document.getElementById("radius");
-          //var radiusval = radiuss.value;
-          //if (radiusval == ""){
-           // radiusval = 500;
-
-          //}
-
 
           var request = {
           location: pos,
@@ -65,29 +59,15 @@ function initialize() {
       handleNoGeolocation(false);
     }
 
+ var array = [];
+
     function callback(results, status) {
       $("#details").empty();
       if (status == google.maps.places.PlacesServiceStatus.OK) {
         downloadUrl("php_to_xml.php",function(data){
           var xml = data.responseXML;
-          var array = [];
           var markers = xml.documentElement.getElementsByTagName("resdetails");
           var detail = xml.documentElement.getElementsByTagName("detail1");
-
-          /*for (r = 0; r < detail.length; r++){
-            var maindetail = detail[r].childNodes[0].getAttribute('name');
-            var mainid = markers[r].getAttribute('id');
-            var dish = detail[r].childNodes[1];
-            var attrname = dish.getAttribute("name");
-            for (j = 0; j<detail[r].childNodes.length;j++){
-              var info = detail[r].childNodes[j].getAttributeNode('dishname');
-              if (info != null){
-                var txt = info.nodeValue;
-                array.push([mainid,maindetail,txt]);                
-              }
-            } 
-          }*/
-
 
           for (r = 0; r < detail.length; r++){
               var maindetail = detail[r].childNodes[0].getAttribute('name');
@@ -110,9 +90,7 @@ function initialize() {
              // console.log(d + "=" + array[d]);
                 if (place.id == array[d][0]){
                   createMarker(results[i]);
-                  //console.log('matched');
-                  var det = document.getElementById("details");
-                  det.innerHTML += place.name + "<br />" + "<span style='padding:10px;color:grey'>"+ place.vicinity + " " + "</span>" + "<br>" + "<div style='border:1px solid black'>" + "<p style='color:orange'>dishes</p> <br>" + array[d][2] + "</div> " + "<br />";                                         
+                  //console.log('matched');                                   
                 }
             }
           }
@@ -124,13 +102,25 @@ function initialize() {
 
     function createMarker(place) {
       var placeLoc = place.geometry.location;
+           var contentString = 
+           '<div id="content">'+
+                '<h1 id="firstHeading" class="firstHeading">'+place.name+'</h1>'+
+                '<h5>'+place.vicinity+'</h5>'+
+                '<h3>'+array[d][2]+'</h3>'+
+                '<div id="bodyContent">'+
+
+                '</div>'+
+            '</div>';
+
+
       var marker = new google.maps.Marker({
         map: map,
+        content: contentString,
         position: place.geometry.location
       });
 
       google.maps.event.addListener(marker, 'click', function() {
-        infowindow.setContent(place.name);
+        infowindow.setContent(contentString);
         infowindow.open(map, this);
       });
 
@@ -177,16 +167,20 @@ google.maps.event.addDomListener(window, 'load', initialize);
     </script>
   </head>
   <body>
-
-    <article class="row">
-      <h1 class="text-center">VEGGIE GPS</h1>
-
       <section>
+        <div class="content">
+          <h1>VEGGIE GPS</h1>
+          <nav>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="form.html">Signup</a></li>
+            </ul>
+          </nav>
+        </div>
         <div id="map-canvas"></div>
-        <div id="details"></div>
+       <!-- <div id="details"></div>-->
       </section>
 
-    </article>
 
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/foundation/js/foundation.min.js"></script>
