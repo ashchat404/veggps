@@ -1,14 +1,15 @@
-<!DOCTYPE html>
-<html>
-<head>
-<script
-src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDnB1c46S08wnHCFLQBQX-tmHS1mq1tc9E&libraries=places&sensor=false">
-</script>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-</head>
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Foundation</title>
+    <link rel="stylesheet" href="stylesheets/app.css" />
+    <script src="bower_components/modernizr/modernizr.js"></script>
+  </head>
 
 <body>
-<form method="post" action="process.php">
+<form style="width:500px;margin:0 auto;" method="post" action="process.php">
   <label>Restaurant name:</label><input name="name" type="text" ><br />
   <label>Restaurant id:</label><input name="id" type="text" ><br />
   <label>Postcode:</label><input name="postcode" type="text" ><br />
@@ -20,5 +21,8 @@ src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDnB1c46S08wnHCFLQBQX-tmHS1
   <label>Price:</label><input name="price3" type="number" ><br />
   <input type="submit">
 </form>
+<script src="bower_components/jquery/jquery.js"></script>
+<script src="bower_components/foundation/js/foundation.min.js"></script>
+<script src="js/app.js"></script>
 </body>
 </html>

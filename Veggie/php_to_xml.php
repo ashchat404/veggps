@@ -15,7 +15,7 @@ $connection = mysql_connect($hostname, $username, $password) or die(mysql_error(
 
 $db_selected = mysql_select_db($database);
 
-$query = "SELECT DISTINCT  *  FROM info_main";
+$query = "SELECT DISTINCT  *  FROM parent_main";
 
 $result = mysql_query($query);
 
@@ -29,27 +29,28 @@ echo '<markers>';
 
 // Iterate through the rows, printing XML nodes for each
 while ($row = @mysql_fetch_assoc($result)){
-  $id=$row['res_id'];
+  $id=$row['id'];
   // ADD TO XML DOCUMENT NODE
   echo '<marker> ';
 
       echo '<detail1>';
         echo '<resdetails ';
-            echo 'name="' . parseToXML($row['res_name']) . '" ';
+            echo 'name="' . parseToXML($row['name']) . '" ';
             echo 'id="' . parseToXML($id) . '" ';
-            echo 'pc="' . parseToXML($row['res_pc'] ). '" ';
+            echo 'address="' . parseToXML($row['address'] ). '" ';
+            echo 'pc="' . parseToXML($row['pc'] ). '" ';
         echo '/>';
 
-        $dishes = "SELECT * FROM dishes WHERE res_id = '" . $id . "'";
+        $dishes = "SELECT * FROM child_dish WHERE F_id = '" . $id . "'";
 
         $dish = mysql_query($dishes);
 
         while ($row2 = @mysql_fetch_assoc($dish)){
-          $id2 = $row2['res_id'];
+          $id2 = $row2['F_id'];
           
             echo '<dishdetails ';
-                echo 'dishname="' . parseToXML($row2['dishName']) . '" ';
-                echo 'price="' . parseToXML($row2['price']) . '" ';
+                echo 'dishname="' . parseToXML($row2['dish_name']) . '" ';
+                echo 'price="' . parseToXML($row2['dish_price']) . '" ';
             echo '/>';
           
         }
