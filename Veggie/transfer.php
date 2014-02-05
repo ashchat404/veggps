@@ -18,14 +18,20 @@ mysql_select_db($database);
 		 	echo '<br />';
 		 	echo $ps;  
 		 	echo '<br />';
-		 	$result = mysql_query("INSERT INTO parent_main (name, address,pc) VALUES ('$n','$ps','$uid')") or die(mysql_error());
-		 	$extra = mysql_insert_id();
-		 	$data = json_decode(stripcslashes($_POST['strings']));
-		 	foreach ($data as $d) {
-		 		echo $d;
-		 		echo '<br />';
-		 		echo $extra; 
-		 		$result_dish = mysql_query("INSERT INTO child_dish (dish_name,dish_price,F_id) VALUES ('$d','$price', '$extra')") or die(mysql_error());
+			$check = mysql_query("SELECT name, pc FROM parent_main WHERE name='$n' AND pc='$uid' ");
+			 if (!mysql_num_rows($check)){
+			 	$result = mysql_query("INSERT INTO parent_main (name, address,pc) VALUES ('$n','$ps','$uid')") or die(mysql_error());
+			 	$extra = mysql_insert_id();
+			 	$data = json_decode(stripcslashes($_POST['strings']));
+			 	foreach ($data as $d) {
+			 		echo $d;
+			 		echo '<br />';
+			 		echo $extra; 
+			 		$result_dish = mysql_query("INSERT INTO child_dish (dish_name,dish_price,F_id) VALUES ('$d','$price', '$extra')") or die(mysql_error());
+			 	}
+		 	}
+		 	else{
+		 		echo "data already exists";
 		 	}
 		 	
 		}

@@ -12,14 +12,6 @@
 var map;
 var infowindow;
 function initialize() {
-  $(".hiden").hide();
-  $(".form").css({
-    position: 'absolute',
-    right: '0px',
-    zIndex: '999'
-  });
-    console.log(document.getElementById("search").value)
-    var query = document.getElementById("search").value
     var mapOptions = {
       zoom: 15,
       mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -98,12 +90,11 @@ function initialize() {
             console.log(results[i]);
             for (d = 0;d < array.length; d++){
              // console.log(d + "=" + array[d]);
-             //console.log(array[d]);
-              for (z = 0; z<array[d][4].length; z++){
-                if (place.vicinity == array[d][1] && query == array[d][4][z]){
-                  createMarker(results[i]);                            
+             console.log(array[d][4][0]);
+                if (place.vicinity == array[d][1]){
+                  createMarker(results[i]);
+                  console.log(array[d][1]);                                   
                 }
-              }
             }
           }
 
@@ -120,7 +111,7 @@ function initialize() {
                 '<h5>'+place.vicinity+'</h5>'+
                 '<div id="bodyContent">'+
                 '<p>'+array[d][2]+'</p>'+
-                '<p>'+array[d][4]+'</p>'+
+                '<p>'+array[d][4][0]+'</p>'+
                 '</div>'+
             '</div>';
 
@@ -174,19 +165,20 @@ function initialize() {
     }
   
   //]]>
-//google.maps.event.addDomListener(window, 'load', initialize);
+google.maps.event.addDomListener(window, 'load', initialize);
 
     </script>
   </head>
   <body>
       <section>
-        <div class="main_text">
-          <h1 class="hiden">WELCOME TO VEGGPS</h1>
-          <h2 class="hiden">Simply type a dish name above and hit submit, you'll get a list of restaurants which serves it :)</h2>
-          <form class="form">
-            <input id="search" type="text" class="text-center" value="search for dish">
-            <a href="#" class="button" onclick="initialize()">Submit</a>
-          </form>
+        <div class="content">
+          <h1>VEGGIE GPS</h1>
+          <nav>
+            <ul>
+              <li><a href="#">About Us</a></li>
+              <li><a href="form.html">Signup</a></li>
+            </ul>
+          </nav>
         </div>
         <div id="map-canvas"></div>
        <!-- <div id="details"></div>-->
