@@ -32,7 +32,20 @@ body,html,section{height:100%;width:100%}
 	position:absolute;
 	width:100%;
 	text-align:center;
-	top: 30%;
+	top: 10%;
+
+	form{
+		width: 320px;
+		margin: 0 auto;
+
+		input{
+			width: 200px;
+			margin: 0 auto;
+			float: left;
+			height: 51px;
+		}
+	}
+
 }
 img[src*="gstatic.com/"], img[src*="googleapis.com/"] {
 max-width: none;

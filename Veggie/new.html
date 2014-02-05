@@ -138,7 +138,7 @@ function initialize() {
                           place.vicinity +
                           ' <br />'+ 
                           postcode +
-                          '<a href="#" class="dishnames" onclick="show()">Add items</a>'
+                          '<input type="button" class="dishnames" onclick="show()"  value="Add"/>'
     );
     infowindow.open(map, marker);
   });
@@ -167,8 +167,12 @@ function postinfo(){
   var input = $(".modalBox input:text");
   $.each(input,function(i,n){
     console.log($(this).val());
-
-    disharray.push($(this).val());
+      if ($(this).val() != ""){
+         disharray.push($(this).val());
+       }else{
+        console.log('few empty fields');
+       }
+   
   });
   console.log(disharray);
   $("#send").val("Added Sucessfully");
@@ -203,10 +207,7 @@ function postinfo(){
       <input type="radio" name="type" id="changetype-geocode">
       <label for="changetype-geocode">Geocodes</label>
     </div> -->
-        <div class="content">
-
-        </div>
-    <div class="modalBox hide" style="position:absolute;width:50%;background:black;z-index:99999">
+    <div class="modalBox hide" style="left:20px;position:absolute;width:300px;background:rgba(0,0,0,0.7);z-index:9999;padding: 10px">
       <input class="dish0" type="text"/>
       <input class="dish1" type="text"/>
       <input class="dish2" type="text"/>

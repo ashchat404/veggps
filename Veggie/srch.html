@@ -12,7 +12,12 @@
 var map;
 var infowindow;
 function initialize() {
-  $(".hiden").fadeOut('slow');
+  $(".hiden").hide();
+  $(".form").css({
+    position: 'absolute',
+    right: '0px',
+    zIndex: '999'
+  });
     console.log(document.getElementById("search").value)
     var query = document.getElementById("search").value
     var mapOptions = {
@@ -175,16 +180,13 @@ function initialize() {
   </head>
   <body>
       <section>
-        <div class="content">
-            <form>
-              <br />
-              <input id="search" type="text" class="text-center" value="search for dish">
-              <a href="#" class="button" onclick="initialize()">Submit</a>
-            </form>
-        </div>
         <div class="main_text">
           <h1 class="hiden">WELCOME TO VEGGPS</h1>
-          <h2 class="hiden">Simply type a dish name above and hit submit, you get a list of restaurants which serves it :)</h2>
+          <h2 class="hiden">Simply type a dish name above and hit submit, you'll get a list of restaurants which serves it :)</h2>
+          <form class="form">
+            <input id="search" type="text" class="text-center" value="search for dish">
+            <a href="#" class="button" onclick="initialize()">Submit</a>
+          </form>
         </div>
         <div id="map-canvas"></div>
        <!-- <div id="details"></div>-->
