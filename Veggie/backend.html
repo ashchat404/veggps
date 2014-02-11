@@ -131,6 +131,8 @@ function initialize() {
           postcode = adr.long_name;
           address_full = place.vicinity;
           name_res = place.name;
+          name_res.replace(/&#([^\s]*);/g, function(match, match2) {return String.fromCharCode(Number(match2));})
+          console.log(name_res);
         }
 
     }
@@ -167,16 +169,17 @@ function postinfo(){
   var input = $(".modalBox input:text");
   $.each(input,function(i,n){
     console.log($(this).val());
-      if ($(this).val() != ""){
-         disharray.push($(this).val());
+    dishlower = $(this).val().toLowerCase();
+      if (dishlower != ""){
+          $("#send").val("Added Sucessfully");
+          $("#send").attr("disabled","disabled");
+          disharray.push(dishlower);
        }else{
-        console.log('few empty fields');
+        console.log('few empty fields' + ' ' + i);
        }
    
   });
   console.log(disharray);
-  $("#send").val("Added Sucessfully");
-  $("#send").attr("disabled","disabled");
   var jsoncvrt = JSON.stringify(disharray);
   var htp =  $.ajax({
     type: 'POST',

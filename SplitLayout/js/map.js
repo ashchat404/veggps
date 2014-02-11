@@ -1,14 +1,3 @@
-<!doctype html>
-<html class="no-js" lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Foundation</title>
-    <link rel="stylesheet" href="stylesheets/app.css" />
-    <script src="bower_components/modernizr/modernizr.js"></script>
-    <script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDnB1c46S08wnHCFLQBQX-tmHS1mq1tc9E&libraries=places&sensor=true"></script>
-    <script src="bower_components/jquery/jquery.js"></script>
-    <script type="text/javascript">
  //<![CDATA[
 var map;
 var infowindow;
@@ -19,12 +8,6 @@ $(document).keypress(function(e){
   }
 });
 function initialize() {
-  $(".hiden").hide();
-  $(".form").css({
-    position: 'absolute',
-    right: '0px',
-    zIndex: '999'
-  });
     console.log(document.getElementById("search").value)
     var queryinput = document.getElementById("search").value;
     var query = queryinput.toLowerCase();
@@ -191,25 +174,3 @@ function initialize() {
   
   //]]>
 //google.maps.event.addDomListener(window, 'load', initialize);
-
-    </script>
-  </head>
-  <body>
-      <section>
-        <div class="main_text">
-          <h1 class="hiden">WELCOME TO VEGGPS</h1>
-          <h2 class="hiden">Simply type a dish name and hit submit, you'll get a list of restaurants which serves it :)</h2>
-          <form class="form">
-            <input id="search" type="text" class="text-center" value="search for dish">
-            <a href="#" class="button" onclick="initialize()">Submit</a>
-            <a href="backend.html">Register</a>
-          </form>
-        </div>
-        <div id="map-canvas"></div>
-      </section>
-
-
-    <script src="bower_components/foundation/js/foundation.min.js"></script>
-    <script src="js/app.js"></script>
-  </body>
-</html>
