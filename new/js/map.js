@@ -7,16 +7,24 @@ $(document).keypress(function(e){
     return  false;
   }
 });
-function initialize() {
-    console.log(document.getElementById("search").value)
-    var queryinput = document.getElementById("search").value;
-    var query = queryinput.toLowerCase();
+function initialize(divId,isit) {
+var queryinput;
+var query;
+  if (isit == 'true'){
+    queryinput = document.getElementById("search").value;
+    query = queryinput.toLowerCase();
+  }
+  else{
+    query = 'show_all';
+  }
+    console.log(query);
+    $("#full_content").empty();
     var mapOptions = {
       zoom: 15,
       mapTypeId: google.maps.MapTypeId.ROADMAP
     };
 
-    map = new google.maps.Map(document.getElementById('map-canvas'),
+    map = new google.maps.Map(document.getElementById(divId),
     mapOptions);
 
     // Try HTML5 geolocation
@@ -58,14 +66,14 @@ function initialize() {
       handleNoGeolocation(false);
     }
 
- var array = [];
+    var array = [];
+    var div = document.getElementById("full_content");
 
     function userreview(){
 
     }
 
     function callback(results, status) {
-      //$("#details").empty();
       if (status == google.maps.places.PlacesServiceStatus.OK) {
         downloadUrl("http://talentedash.co.uk/veggps/php_to_xml.php",function(data){
           var xml = data.responseXML;
@@ -81,33 +89,49 @@ function initialize() {
               var dishes=[];
               for (j = 1; j<detail[r].childNodes.length;j++){  // start at 1 because 0 should be resdetails
                   var info = detail[r].childNodes[j].getAttributeNode('dishname');
+                  var info_price = detail[r].childNodes[j].getAttributeNode('price');
                   if (info != null){
-                      dishes.push(info.nodeValue); 
-                  }
-              }
+                      dishes.push([info.nodeValue,info_price.nodeValue]); 
+                  };
+              };
               array.push([mainid,address,pc,maindetail,dishes]);  
-          }
+          };
+
           for (var i = 0; i < results.length; i++){
             var place = results[i];
-            //console.log(results[i].id + " " + results[i].name);
             console.log(results[i]);
             for (d = 0;d < array.length; d++){
-             // console.log(d + "=" + array[d]);
-             console.log(array[d]);
-              for (z = 0; z<array[d][4].length; z++){
-                if (place.name == array[d][3] && array[d][4][z].indexOf(query) > -1){
-                  createMarker(results[i]);                            
-                }
-                else{
-                  //alert(query+ 'is not present in our database');
-                }
-              }
-            }
-          }
 
-        });
-      }
-    }
+              for (z = 0; z<array[d][4].length; z++){
+                for (m = 0; m < array[d][4][z].length; m++ ){
+                  nameres = array[d][3].replace(/&#39;/g,"'");
+                  if (place.name == nameres && array[d][4][z][m].indexOf(query) > -1){
+                    createMarker(results[i]);
+                    $(div).show();
+                    div.innerHTML += 
+                    "<h2>"+array[d][4][z].join(" - ")+"</h2>"+
+                    "<p>"+place.name+"</p>"+
+                    "<p>"+place.vicinity + " - " + array[d][2] + "</p>";
+                  }
+                  if(!query || query == "show_all"){
+                    if(place.name == nameres){
+                      createMarker(results[i]);
+                      $(div).hide();
+                    }
+                  }
+                };//array -> dish content loop end
+
+              };//array -> dish loop end
+
+            };//array loop end
+
+          };//main result loop end
+        console.log(array);
+        });//download url function end
+
+      };
+
+    };
 
 
     function createMarker(place) {
@@ -122,7 +146,6 @@ function initialize() {
                 '<a href="#" class="reviews" onclick="userreview();">View User Reviews</a>'
                 '</div>'+
             '</div>';
-
       var marker = new google.maps.Marker({
         map: map,
         content: contentString,
@@ -135,42 +158,41 @@ function initialize() {
         infowindow.open(map, this);
       });
 
-    }
+    };
+};//main initialize function end
+
+function downloadUrl(url, callback) {
+  var request = window.ActiveXObject ?
+  new ActiveXObject('Microsoft.XMLHTTP') :
+  new XMLHttpRequest;
+
+  request.onreadystatechange = function() {
+  if (request.readyState == 4) {
+    request.onreadystatechange = doNothing;
+    callback(request, request.status);
+  }
+};
+
+function doNothing() {}
+  request.open('GET', url, true);
+  request.send(null);
 }
 
-    function downloadUrl(url, callback) {
-      var request = window.ActiveXObject ?
-      new ActiveXObject('Microsoft.XMLHTTP') :
-      new XMLHttpRequest;
+function handleNoGeolocation(errorFlag) {
+  if (errorFlag) {
+    var content = 'Error: The Geolocation service failed, please enable from setting.';
+  } else {
+    var content = 'Error: Your browser doesn\'t support geolocation.';
+  }
 
-      request.onreadystatechange = function() {
-      if (request.readyState == 4) {
-        request.onreadystatechange = doNothing;
-        callback(request, request.status);
-      }
-    };
-    
-    function doNothing() {}
-      request.open('GET', url, true);
-      request.send(null);
-    }
-    
-    function handleNoGeolocation(errorFlag) {
-      if (errorFlag) {
-        var content = 'Error: The Geolocation service failed.';
-      } else {
-        var content = 'Error: Your browser doesn\'t support geolocation.';
-      }
+  var options = {
+    map: map,
+    position: new google.maps.LatLng(60, 105),
+    content: content
+  };
 
-      var options = {
-        map: map,
-        position: new google.maps.LatLng(60, 105),
-        content: content
-      };
-
-      var infowindow = new google.maps.InfoWindow(options);
-      map.setCenter(options.position);
-    }
+  var infowindow = new google.maps.InfoWindow(options);
+  map.setCenter(options.position);
+}
   
   //]]>
-//google.maps.event.addDomListener(window, 'load', initialize);
