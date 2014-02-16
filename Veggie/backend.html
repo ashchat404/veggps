@@ -200,19 +200,23 @@ function postinfo(){
   </head>
   <body>
     <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
+<!--     <div id="type-selector" class="controls">
+      <input type="radio" name="type" id="changetype-all" checked="checked">
+      <label for="changetype-all">All</label>
+
+      <input type="radio" name="type" id="changetype-establishment">
+      <label for="changetype-establishment">Establishments</label>
+
+      <input type="radio" name="type" id="changetype-geocode">
+      <label for="changetype-geocode">Geocodes</label>
+    </div> -->
     <div class="modalBox hide" style="left:20px;position:absolute;width:300px;background:rgba(0,0,0,0.7);z-index:9999;padding: 10px">
       <input class="dish0" type="text"/>
-      <input type="text" style="width:30px"/>
       <input class="dish1" type="text"/>
-      <input type="text" style="width:30px"/>
       <input class="dish2" type="text"/>
-      <input type="text" style="width:30px"/>
       <input class="dish3" type="text"/>
-      <input type="text" style="width:30px"/>
       <input class="dish4" type="text"/>
-      <input type="text" style="width:30px"/>
       <input class="dish5" type="text"/>
-      <input type="text" style="width:30px"/>
       <input type="button" onclick="postinfo()" id="send" value="Add"></input>
     </div>
     <div id="map-canvas"></div>

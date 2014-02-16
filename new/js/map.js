@@ -101,7 +101,6 @@ var query;
             var place = results[i];
             console.log(results[i]);
             for (d = 0;d < array.length; d++){
-
               for (z = 0; z<array[d][4].length; z++){
                 for (m = 0; m < array[d][4][z].length; m++ ){
                   nameres = array[d][3].replace(/&#39;/g,"'");
