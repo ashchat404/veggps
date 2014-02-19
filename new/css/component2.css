@@ -5,24 +5,24 @@ html, body,
 	height: 100%;
 }
 ::-webkit-input-placeholder { /* WebKit browsers */
-    color:    white;
+    color:    black;
     font-size: 20px;
     font-style: italic;
 
 }
 :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color:    white;
+    color:    grey;
     font-size: 20px;
     font-style: italic;
 
 }
 ::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color:    white;
+    color:    grey;
     font-size: 20px;
     font-style: italic;
 }
 :-ms-input-placeholder { /* Internet Explorer 10+ */
-    color:    white;
+    color:    grey;
     font-size: 20px;
     font-style: italic;
 }
@@ -148,6 +148,7 @@ font-family: 'Lato', Calibri, Arial, sans-serif;
 .intro-content h1 > span:first-child {
 	font-weight: 300;
 	font-size: 2em;
+	padding-bottom: 7px;
 }
 
 .intro-content h1 > span:nth-child(2) {
@@ -470,3 +471,54 @@ font-family: 'Lato', Calibri, Arial, sans-serif;
 @media screen and (max-width: 320px) {
 	body { font-size: 70%; }
 }
+
+		.hide{display: none;}
+      #map {
+        height: 500px;
+        margin: 0px;
+        padding: 0px
+      }
+      .controls {
+        margin-top: 16px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 50px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+      #pac-input {
+        background-color: #fff;
+        padding: 0 11px 0 13px;
+        width: 400px;
+        font-family: Roboto;
+        font-size: 20px;
+        font-weight: 300;
+        text-overflow: ellipsis;
+        top: 20px!important;
+      }
+
+      #pac-input:focus {
+        border-color: #4d90fe;
+        margin-left: -1px;
+        padding-left: 14px;  /* Regular padding-left + 1. */
+        width: 401px;
+      }
+
+      .pac-container {
+        font-family: Roboto;
+      }
+
+      #type-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        padding: 5px 11px 0px 11px;
+      }
+
+      #type-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }

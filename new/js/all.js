@@ -1,82 +1,18 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Place Autocomplete</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <meta charset="utf-8">
-    <style>
-      html, body, #map-canvas {
-        height: 100%;
-        margin: 0px;
-        padding: 0px
-      }
-      .controls {
-        margin-top: 16px;
-        border: 1px solid transparent;
-        border-radius: 2px 0 0 2px;
-        box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        height: 32px;
-        outline: none;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-      }
-
-      #pac-input {
-        background-color: #fff;
-        padding: 0 11px 0 13px;
-        width: 400px;
-        font-family: Roboto;
-        font-size: 15px;
-        font-weight: 300;
-        text-overflow: ellipsis;
-        top: 20px!important;
-      }
-
-      #pac-input:focus {
-        border-color: #4d90fe;
-        margin-left: -1px;
-        padding-left: 14px;  /* Regular padding-left + 1. */
-        width: 401px;
-      }
-
-      .pac-container {
-        font-family: Roboto;
-      }
-
-      #type-selector {
-        color: #fff;
-        background-color: #4d90fe;
-        padding: 5px 11px 0px 11px;
-      }
-
-      #type-selector label {
-        font-family: Roboto;
-        font-size: 13px;
-        font-weight: 300;
-      }
-}
-
-    </style>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
-
-    <script>
 var postcode;
 var address_full;
 var name_res;
-function initialize() {
+function bk() {
   var mapOptions = {
     center: new google.maps.LatLng(51.481383, -0.043945),
     zoom: 10
   };
-  var map = new google.maps.Map(document.getElementById('map-canvas'),
+  var map = new google.maps.Map(document.getElementById('map'),
     mapOptions);
 
   var input = /** @type {HTMLInputElement} */(
       document.getElementById('pac-input'));
 
-  var types = document.getElementById('type-selector');
+  var types;
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(types);
 
@@ -157,7 +93,7 @@ function initialize() {
   setupClickListener('changetype-geocode', ['geocode']);
 }
 
-google.maps.event.addDomListener(window, 'load', initialize);
+google.maps.event.addDomListener(window, 'load', bk);
 
 function show(){
    $('.modalBox').show('slow');
@@ -181,7 +117,7 @@ function postinfo(){
   var jsoncvrt = JSON.stringify(disharray);
   var htp =  $.ajax({
     type: 'POST',
-    url: 'transfer.php',
+    url: 'http://talentedash.co.uk/veggps/new/transfer.php',
     data: {
       postal: postcode,
       name: name_res,
@@ -194,25 +130,3 @@ function postinfo(){
     }   
   });
 }
-    </script>
-  </head>
-  <body>
-    <input id="pac-input" class="controls" type="text" placeholder="Enter a location">
-    <div class="modalBox hide" style="left:20px;position:absolute;width:300px;background:rgba(0,0,0,0.7);z-index:9999;padding: 10px">
-      <input class="dish0" type="text"/>
-      <input type="text" style="width:30px"/>
-      <input class="dish1" type="text"/>
-      <input type="text" style="width:30px"/>
-      <input class="dish2" type="text"/>
-      <input type="text" style="width:30px"/>
-      <input class="dish3" type="text"/>
-      <input type="text" style="width:30px"/>
-      <input class="dish4" type="text"/>
-      <input type="text" style="width:30px"/>
-      <input class="dish5" type="text"/>
-      <input type="text" style="width:30px"/>
-      <input type="button" onclick="postinfo()" id="send" value="Add"></input>
-    </div>
-    <div id="map-canvas"></div>
-  </body>
-</html>

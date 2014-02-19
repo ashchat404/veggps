@@ -16,6 +16,7 @@
     	<script src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDnB1c46S08wnHCFLQBQX-tmHS1mq1tc9E&libraries=places&sensor=true"></script>
 
 		<script src="js/map.js"></script>
+		<script src="js/all.js"></script>
 	</head>
 	<body>
 		<div class="container">
@@ -40,7 +41,7 @@
 								<input id="search" type="text" placeholder="Type Dish Name" required/>
 							</span>
 							<span>
-								<a href="#" onclick="initialize('map-canvas','true')"/>Submit</a>
+								<a href="javascript:void(0)" class="submit"/>Submit</a>
 							</span>
 						</h1>
 						</div>
@@ -48,8 +49,8 @@
 					</div>
 					<div class="side side-right">
 						<div class="intro-content">
-							<div class="profile"><img src="img/icon.png" alt="profile2"></div>
-							<h1><span>Veg Restaurants</span><span>Near You!</span></h1>
+							<div class="profile"><img src="img/add.png" alt="profile2"></div>
+							<h1><span>Add Veggie Food</span><span>Share it!</span></h1>
 						</div>
 						<div class="overlay"></div>
 					</div>
@@ -57,14 +58,24 @@
 				<div class="page page-right">
 					<div class="page-inner">
 						<section>
-							<div id="all-map"></div>
+								<input id="pac-input" class="controls" type="text" placeholder="Eg. Restaurant Name, area">
+							    <div class="modalBox hide" style="left:20px;position:absolute;width:300px;background:rgba(0,0,0,0.7);z-index:9999;padding: 10px">
+							      <input class="dish0" type="text"/>
+							      <input class="dish1" type="text"/>
+							      <input class="dish2" type="text"/>
+							      <input class="dish3" type="text"/>
+							      <input class="dish4" type="text"/>
+							      <input class="dish5" type="text"/>
+							      <input type="button" onclick="postinfo()" id="send" value="Add"></input>
+							    </div>
+							<div id="map"></div>
 						</section>
 					</div><!-- /page-inner -->
 				</div><!-- /page-right -->
 				<div class="page page-left">
 					<div class="page-inner">
 						<section>
-							<h2>Results</h2>
+							<h2>Results</h2><a id="more" href="#">more</a>
 							<div id="map-canvas"></div>
 						</section>
 						<section id="full_content">
