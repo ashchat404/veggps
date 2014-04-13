@@ -15,6 +15,13 @@ function initialize () {
   map = new google.maps.Map(document.getElementById("map-canvas"),
   mapOptions);
   geo();
+  google.maps.event.addListenerOnce(map, 'tilesloaded', function(){
+      $("#load").animate({
+        opacity:"0",
+      },500,"linear",function(){
+        $("#load").hide();
+      });
+  });
 
 };//main initialize function end
 
@@ -105,12 +112,13 @@ function compareData(results){
             createMarker(results[i]);
             $(div).show();
             div.innerHTML += 
-            "<h2>"+array[d][4][z].join(" - ")+"</h2>"+
+            "<h2>"+array[d][4][z].join(" - £")+"</h2>"+
             "<p>"+place.name+"</p>"+
-            "<p>"+place.vicinity + " - " + array[d][2] + "</p>";
+            "<p>"+place.vicinity + " - " + array[d][2] + "</p>"+
+            "<a href='javascript:void(0)' id='review' onclick='reviews()''>View User Review</a>";
           }
           if(!query){
-            if(place.name == nameres){
+            if(place.name === nameres){
               createMarker(results[i]);
               $(div).hide();
             }
@@ -134,7 +142,6 @@ function createMarker(place) {
       '<div id="bodyContent">'+
       '<p>'+array[d][2]+'</p>'+
       '<p>'+array[d][4]+'</p>'+
-      '<a href="#" class="reviews" onclick="userreview();">View User Reviews</a>'
       '</div>'+
   '</div>';
 
@@ -167,6 +174,9 @@ function callback(results, status) {
   }
 };
 
+function reviews(){
+    //$('#review_box').show();
+};
 
 function downloadUrl(url, callback) {
   var request = window.ActiveXObject ?
@@ -211,7 +221,9 @@ function handleNoGeolocation(errorFlag) {
 
   var infowindow = new google.maps.InfoWindow(options);
   map.setCenter(options.position);
+
 };
+
 
 google.maps.event.addDomListener(window, 'load', initialize);
   //]]>

@@ -74,7 +74,7 @@ function bk() {
                           place.vicinity +
                           ' <br />'+ 
                           postcode +
-                          '<input type="button" class="dishnames" onclick="show()"  value="Add"/>'
+                          '<button class="dishnames" onclick="show()">Add</button>'
     );
     infowindow.open(map, marker);
   });
@@ -94,39 +94,43 @@ function bk() {
 }
 
 google.maps.event.addDomListener(window, 'load', bk);
-
+var newarray = [];
 function show(){
    $('.modalBox').show('slow');
 };
 var disharray = [];
 function postinfo(){
-  var input = $(".modalBox input:text");
-  $.each(input,function(i,n){
-    console.log($(this).val());
-    dishlower = $(this).val().toLowerCase();
-      if (dishlower != ""){
-          $("#send").val("Added Sucessfully");
-          $("#send").attr("disabled","disabled");
-          disharray.push(dishlower);
-       }else{
-        console.log('few empty fields' + ' ' + i);
-       }
-   
-  });
+  disharray.length = 0;
+  var numbertotal;
+  var numbertotal = $(".modalBox .row").length;
+
+  var inputs = $(".modalBox .row input");
+
+  for(h=0;h<numbertotal;h++){
+    var y = $("input[name=dish"+h+"][type=text]").val();
+    var z = $("input[name=dish"+h+"][type=number]").val();
+    if(!y == "" & !z == ""){
+      disharray.push([y,z]);
+    }
+    else{
+      //alert("you have provide both dish-name and dish-cost, oe else they will not be saved in our database")
+    }
+    
+  }
   console.log(disharray);
   var jsoncvrt = JSON.stringify(disharray);
   var htp =  $.ajax({
     type: 'POST',
-    url: 'http://talentedash.co.uk/veggps/new/transfer.php',
+    url: 'http://talentedash.co.uk/veggps/transfer.php',
     data: {
       postal: postcode,
       name: name_res,
       addrs: address_full,
       strings: jsoncvrt
-    },
-    sucess: function(data){
-      htp.abort();
-      console.log('Sucessful');
-    }   
+    }  
+  }).done(function(){
+    console.log("success");
+    $('input').val('');
+    $('.modalBox').hide('slow');
   });
 }

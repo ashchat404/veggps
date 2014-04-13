@@ -22,13 +22,26 @@ mysql_select_db($database);
 			 if (!mysql_num_rows($check)){
 			 	$result = mysql_query("INSERT INTO parent_main (name, address,pc) VALUES ('$n','$ps','$uid')") or die(mysql_error());
 			 	$extra = mysql_insert_id();
+			 	$values = array();
 			 	$data = json_decode(stripcslashes($_POST['strings']));
-			 	foreach ($data as $d) {
-			 		echo $d;
-			 		echo '<br />';
-			 		echo $extra; 
-			 		$result_dish = mysql_query("INSERT INTO child_dish (dish_name,dish_price,F_id) VALUES ('$d','$price', '$extra')") or die(mysql_error());
+			 	foreach ($data as $d => $v) {
+			 		 if( sizeof($v) == 2 ){
+					    $values[$v[0]] = floatval($v[1]);
+					 } 
 			 	}
+
+				$con = mysqli_connect('mysql4.000webhost.com', 'a2582397_ash', '70882018A', 'a2582397_veggps');
+				$query = "INSERT INTO child_dish (dish_name, dish_price, F_id) VALUES(?, ?, ?);";
+				$stmt = $con->prepare($query); 
+				if( $stmt ){
+				   foreach ($values as $key => $value){
+				        $stmt->bind_param("sdd", $key, $value, $extra);
+				        $stmt->execute();
+				   }
+				   $stmt->close();  
+				}
+				$con->close(); 
+
 		 	}
 		 	else{
 		 		echo "data already exists";
@@ -37,5 +50,8 @@ mysql_select_db($database);
 		}
 		ob_end_flush();
 
+	}
+	else{
+		echo "all fields empty";
 	}
 ?>
